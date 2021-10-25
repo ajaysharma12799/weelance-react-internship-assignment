@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, useEffect} from 'react'
+import axios from 'axios';
+import Card from './components/Card';
+import "./App.css"
 
-function App() {
+const App = () => {
+  const [images, setImages] = useState([]);
+
+  const fetchImages = async () => {
+    const response = await axios.get("https://dog.ceo/api/breeds/image/random/3");
+    setImages(response.data.message);
+  }
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      {
+        images.map((dog, idx) => (
+          <Card dog={dog} key={idx} />
+        ))
+      }
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
